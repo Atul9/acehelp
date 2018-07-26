@@ -24,6 +24,7 @@ type Route
     | Settings OrganizationApiKey
     | Dashboard
     | NotFound
+    | OrganizationCreate
 
 
 routeMatcher : Parser (Route -> a) a
@@ -39,12 +40,12 @@ routeMatcher =
         , Url.map UrlCreate (s "urls" </> s "new")
         , Url.map CategoryCreate (s "categories" </> s "new")
         , Url.map ArticleEdit (s "articles" </> string)
+        , Url.map OrganizationCreate (s "organizations" </> s "new")
         ]
 
 
 
 -- INTERNAL --
-
 
 routeToString : Route -> String
 routeToString page =
@@ -53,7 +54,6 @@ routeToString page =
             case page of
                 Dashboard ->
                     []
-
                 ArticleList organizationApiKey ->
                     [ "organizations", organizationApiKey, "articles" ]
 
@@ -70,16 +70,19 @@ routeToString page =
                     [ "organizations", organizationApiKey, "settings" ]
 
                 ArticleCreate ->
-                    [ "articles", "new" ]
+                    [ "admin", "articles", "new" ]
 
                 UrlCreate ->
-                    [ "urls", "new" ]
+                    [ "admin", "urls", "new" ]
 
                 CategoryCreate ->
-                    [ "categories", "new" ]
+                    [ "admin", "categories", "new" ]
 
                 ArticleEdit articleId ->
-                    [ "articles", articleId ]
+                    [ "admin", "articles", articleId ]
+
+                OrganizationCreate ->
+                    [ "organizations", "new" ]
 
                 NotFound ->
                     []
