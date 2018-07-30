@@ -70,16 +70,16 @@ routeToString page =
                     [ "organizations", organizationApiKey, "settings" ]
 
                 ArticleCreate ->
-                    [ "admin", "articles", "new" ]
+                    [ "articles", "new" ]
 
                 UrlCreate ->
-                    [ "admin", "urls", "new" ]
+                    [ "urls", "new" ]
 
                 CategoryCreate ->
-                    [ "admin", "categories", "new" ]
+                    [ "categories", "new" ]
 
                 ArticleEdit articleId ->
-                    [ "admin", "articles", articleId ]
+                    [ "articles", articleId ]
 
                 OrganizationCreate ->
                     [ "organizations", "new" ]
