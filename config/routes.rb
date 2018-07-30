@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   get "/pages/aceinvoice/integrations", to: "home#integrations"
   get "/pages/aceinvoice/pricing", to: "home#pricing"
 
-  resources :organizations, only: [:show], param: :api_key do
+  resources :organizations, only: [], param: :api_key do
     resources :articles, only: [:index]
   end
 
