@@ -1,5 +1,7 @@
 module Admin.Data.Feedback exposing (..)
 
+import GraphQL.Request.Builder.Arg as Arg
+import GraphQL.Request.Builder.Variable as Var
 import GraphQL.Request.Builder as GQLBuilder
 
 
@@ -22,6 +24,21 @@ requestFeedbacksQuery =
             (GQLBuilder.field "feedbacks"
                 []
                 (GQLBuilder.list
+                    feedbackExtractor
+                )
+            )
+
+
+feedbackByIdQuery : GQLBuilder.Document GQLBuilder.Query Feedback { vars | id : String }
+feedbackByIdQuery =
+    let
+        idVar =
+            Var.required "id" .id Var.string
+    in
+        GQLBuilder.queryDocument
+            (GQLBuilder.extract
+                (GQLBuilder.field "feedback"
+                    [ ( "id", Arg.variable idVar ) ]
                     feedbackExtractor
                 )
             )
