@@ -4,7 +4,10 @@ module Page.Feedback.List exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Events exposing (..)
 import Request.Helpers exposing (NodeEnv, ApiKey)
+import Navigation exposing (..)
+import Route
 import Admin.Request.Feedback exposing (..)
 import Admin.Data.Feedback exposing (..)
 import Task exposing (Task)
@@ -43,6 +46,7 @@ init organizationKey =
 
 type Msg
     = FeedbackListLoaded (Result GQLClient.Error (List Feedback))
+    | Navigate Route.Route
 
 
 update : Msg -> Model -> ApiKey -> NodeEnv -> ( Model, Cmd Msg )
@@ -53,6 +57,9 @@ update msg model apiKey nodeEnv =
 
         FeedbackListLoaded (Err err) ->
             ( { model | error = Just (toString err) }, Cmd.none )
+
+        Navigate page ->
+            model ! [ Navigation.newUrl (Route.routeToString page) ]
 
 
 
@@ -76,18 +83,18 @@ view model =
         , div []
             (List.map
                 (\feedback ->
-                    row feedback
+                    row model feedback
                 )
                 model.feedbackList
             )
         ]
 
 
-row : Feedback -> Html Msg
-row feedback =
+row : Model -> Feedback -> Html Msg
+row model feedback =
     div [ id feedback.id ]
         [ div
-            []
+            [ onClick <| Navigate <| Route.FeedbackShow model.organizationKey feedback.id ]
             [ text feedback.name ]
         , div
             []
