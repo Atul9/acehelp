@@ -6,6 +6,7 @@ class Resolvers::UrlsSearch < GraphQL::Function
   argument :url, types.String
 
   def call(obj, args, context)
+    Utils::ErrorHandler.new.raise_if_no_organization(context)
     query = Url.for_organization(context[:organization])
 
     url = args[:url]

@@ -10,6 +10,7 @@ module Resolvers
           description("Find a #{model.name} by ID")
           argument(:id, !types.String, "ID for Record")
           resolve ->(obj, args, context) {
+            Utils::ErrorHandler.new.raise_if_no_organization(context)
             if model.column_names.include? "organization_id"
               model.find_by(id: args["id"], organization_id: context[:organization].id)
             else

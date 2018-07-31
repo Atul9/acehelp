@@ -12,6 +12,7 @@ class Mutations::ArticleMutations
     return_field :errors, types[Types::ErrorType]
 
     resolve ->(object, inputs, context) {
+      Utils::ErrorHandler.new.raise_if_no_organization(context)
       new_article = Article.new(
         title: inputs[:title],
         desc: inputs[:desc],
@@ -47,6 +48,7 @@ class Mutations::ArticleMutations
     return_field :errors, types[Types::ErrorType]
 
     resolve ->(object, inputs, context) {
+      Utils::ErrorHandler.new.raise_if_no_organization(context)
       article = Article.find_by(id: inputs[:id], organization_id: context[:organization].id)
 
       if article.nil?
@@ -79,6 +81,7 @@ class Mutations::ArticleMutations
     return_field :errors, types[Types::ErrorType]
 
     resolve ->(_obj, inputs, context) {
+      Utils::ErrorHandler.new.raise_if_no_organization(context)
       article = Article.find_by(id: inputs[:id], organization_id: context[:organization].id)
 
       if article.blank?
@@ -107,6 +110,7 @@ class Mutations::ArticleMutations
     return_field :errors, types[Types::ErrorType]
 
     resolve ->(object, inputs, context) {
+      Utils::ErrorHandler.new.raise_if_no_organization(context)
       article = Article.find_by(id: inputs[:id], organization_id: context[:organization].id)
       if article
         if article.increment_upvote
@@ -133,6 +137,7 @@ class Mutations::ArticleMutations
     return_field :errors, types[Types::ErrorType]
 
     resolve ->(object, inputs, context) {
+      Utils::ErrorHandler.new.raise_if_no_organization(context)
       article = Article.find_by(id: inputs[:id], organization_id: context[:organization].id)
 
       if article

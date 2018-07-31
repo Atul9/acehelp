@@ -11,7 +11,7 @@ class Mutations::UrlArticleMutations
     return_field :errors, types[Types::ErrorType]
 
     resolve ->(object, inputs, context) {
-
+      Utils::ErrorHandler.new.raise_if_no_organization(context)
       url = Url.for_organization(context[:organization])
                          .where(id: inputs[:url_id]).first
 

@@ -12,6 +12,7 @@ class Mutations::TicketMutations
     return_field :errors, types[Types::ErrorType]
 
     resolve ->(object, inputs, context) {
+      Utils::ErrorHandler.new.raise_if_no_organization(context)
       new_ticket = Ticket.new(name: inputs[:name],
                               email: inputs[:email],
                               message: inputs[:message],

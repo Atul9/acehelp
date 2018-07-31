@@ -8,6 +8,9 @@ Types::CategoryType = GraphQL::ObjectType.define do
   field :articles, -> { !types[Types::ArticleType] }  do
     preload :articles
     preload_scope ->(args, context) { Article.for_organization(context[:organization]) }
-    resolve ->(obj, args, context) { obj.articles }
+    resolve ->(obj, args, context) do
+      Utils::ErrorHandler.new.raise_if_no_organization(context)
+      obj.articles
+    end
   end
 end

@@ -16,6 +16,9 @@ Types::ArticleType = GraphQL::ObjectType.define do
   field :urls, -> { !types[Types::UrlType] }  do
     preload :urls
     preload_scope ->(args, context) { Url.for_organization(context[:organization]) }
-    resolve ->(obj, args, context) { obj.urls }
+    resolve ->(obj, args, context) do
+      Utils::ErrorHandler.new.raise_if_no_organization(context)
+      obj.urls
+    end
   end
 end

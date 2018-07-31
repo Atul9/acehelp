@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class GraphqlController < ApplicationController
-  include LoadOrganization
 
   def execute
     result = AcehelpSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
@@ -27,9 +26,8 @@ class GraphqlController < ApplicationController
     end
 
     def context
-      {
-          organization: @organization
-      }
+      api_key = request.headers["api-key"] || params["organization_api_key"]
+      { organization: Organization.find_by(api_key: api_key) }
     end
 
     def ensure_hash(ambiguous_param)

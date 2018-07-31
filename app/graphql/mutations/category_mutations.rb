@@ -10,6 +10,8 @@ class Mutations::CategoryMutations
     return_field :errors, types[Types::ErrorType]
 
     resolve ->(object, inputs, context) {
+      Utils::ErrorHandler.new.raise_if_no_organization(context)
+
       new_category = Category.new name: inputs[:name]
       new_category.organization = context[:organization]
 
@@ -68,6 +70,7 @@ class Mutations::CategoryMutations
     return_field :errors, types[Types::ErrorType]
 
     resolve ->(_obj, inputs, context) {
+      Utils::ErrorHandler.new.raise_if_no_organization(context)
       category = Category.find_by(id: inputs[:id], organization_id: context[:organization].id)
 
       if category.blank?

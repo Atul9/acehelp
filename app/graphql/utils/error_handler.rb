@@ -35,4 +35,15 @@ class Utils::ErrorHandler
       end
     end
   end
+
+  def raise_gql_error(message = nil)
+    raise GraphQL::ExecutionError, (message || "Can't continue with this query")
+  end
+
+  def raise_if_no_organization(context)
+    unless context[:organization]
+      raise_gql_error "No Organization found"
+    end
+  end
+
 end
